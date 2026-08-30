@@ -444,6 +444,13 @@
     </footer>
   </main>
 
+  <audio id="danger-alarm" loop preload="auto">
+    <source src="Danger%20alarm%20but%20bass%20boosted.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="payment-chime" preload="auto">
+    <source src="Apple%20pay%20sucesssound%20track%20(mp3cut.net).mp3" type="audio/mpeg">
+  </audio>
+
   <div class="popup-backdrop" id="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
     <div class="popup">
       <div class="popup__bar">Nienminercra Security Center</div>
@@ -481,78 +488,26 @@
     const bottomVideo = document.getElementById('bottom-video');
     const enableSound = document.getElementById('enable-sound');
     const alarmToggle = document.getElementById('alarm-toggle');
-    let alarmContext;
-    let alarmTimer;
+    const dangerAlarm = document.getElementById('danger-alarm');
+    const paymentChime = document.getElementById('payment-chime');
     let alarmMuted = false;
 
-    const playAlarmBurst = () => {
-      const now = alarmContext.currentTime;
-      const master = alarmContext.createGain();
-      const bass = alarmContext.createOscillator();
-      const siren = alarmContext.createOscillator();
-      const bassGain = alarmContext.createGain();
-      const sirenGain = alarmContext.createGain();
-      const compressor = alarmContext.createDynamicsCompressor();
-
-      bass.type = 'sawtooth';
-      bass.frequency.setValueAtTime(74, now);
-      bass.frequency.exponentialRampToValueAtTime(48, now + .24);
-      siren.type = 'square';
-      siren.frequency.setValueAtTime(760, now);
-      siren.frequency.linearRampToValueAtTime(1120, now + .12);
-      siren.frequency.linearRampToValueAtTime(760, now + .24);
-
-      bassGain.gain.setValueAtTime(.001, now);
-      bassGain.gain.exponentialRampToValueAtTime(.95, now + .025);
-      bassGain.gain.exponentialRampToValueAtTime(.001, now + .27);
-      sirenGain.gain.setValueAtTime(.001, now);
-      sirenGain.gain.exponentialRampToValueAtTime(.38, now + .02);
-      sirenGain.gain.exponentialRampToValueAtTime(.001, now + .24);
-      master.gain.value = .92;
-      compressor.threshold.value = -18;
-      compressor.ratio.value = 12;
-
-      bass.connect(bassGain).connect(master);
-      siren.connect(sirenGain).connect(master);
-      master.connect(compressor).connect(alarmContext.destination);
-      bass.start(now);
-      siren.start(now);
-      bass.stop(now + .29);
-      siren.stop(now + .29);
-    };
-
     const startAlarm = () => {
-      if (alarmTimer || alarmMuted) return;
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContext) return;
-      alarmContext = alarmContext || new AudioContext();
-      alarmContext.resume().then(() => {
-        if (alarmMuted || alarmTimer) return;
-        playAlarmBurst();
-        alarmTimer = window.setInterval(playAlarmBurst, 620);
-      });
+      if (alarmMuted) return;
+      dangerAlarm.currentTime = 0;
+      dangerAlarm.volume = 1;
+      dangerAlarm.play().catch(() => {});
     };
 
     const stopAlarm = () => {
-      if (alarmTimer) window.clearInterval(alarmTimer);
-      alarmTimer = undefined;
+      dangerAlarm.pause();
+      dangerAlarm.currentTime = 0;
     };
 
     const playPaymentChime = () => {
-      if (!alarmContext || alarmContext.state !== 'running') return;
-      const now = alarmContext.currentTime;
-      [[1046.5, 0], [1568, .09]].forEach(([frequency, offset]) => {
-        const tone = alarmContext.createOscillator();
-        const gain = alarmContext.createGain();
-        tone.type = 'sine';
-        tone.frequency.setValueAtTime(frequency, now + offset);
-        gain.gain.setValueAtTime(.001, now + offset);
-        gain.gain.exponentialRampToValueAtTime(.22, now + offset + .012);
-        gain.gain.exponentialRampToValueAtTime(.001, now + offset + .26);
-        tone.connect(gain).connect(alarmContext.destination);
-        tone.start(now + offset);
-        tone.stop(now + offset + .28);
-      });
+      paymentChime.currentTime = 0;
+      paymentChime.volume = 1;
+      paymentChime.play().catch(() => {});
     };
 
     const startVideoPopup = () => {
@@ -577,6 +532,7 @@
 
     const closeVideoPopup = () => {
       prankVideo.pause();
+      stopAlarm();
       videoPopup.hidden = true;
       bottomVideo.muted = false;
       bottomVideo.volume = 1;
