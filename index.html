@@ -538,6 +538,23 @@
       alarmTimer = undefined;
     };
 
+    const playPaymentChime = () => {
+      if (!alarmContext || alarmContext.state !== 'running') return;
+      const now = alarmContext.currentTime;
+      [[1046.5, 0], [1568, .09]].forEach(([frequency, offset]) => {
+        const tone = alarmContext.createOscillator();
+        const gain = alarmContext.createGain();
+        tone.type = 'sine';
+        tone.frequency.setValueAtTime(frequency, now + offset);
+        gain.gain.setValueAtTime(.001, now + offset);
+        gain.gain.exponentialRampToValueAtTime(.22, now + offset + .012);
+        gain.gain.exponentialRampToValueAtTime(.001, now + offset + .26);
+        tone.connect(gain).connect(alarmContext.destination);
+        tone.start(now + offset);
+        tone.stop(now + offset + .28);
+      });
+    };
+
     const startVideoPopup = () => {
       videoPopup.hidden = false;
       prankVideo.muted = false;
@@ -681,6 +698,7 @@
       wordPopup.style.top = `${Math.max(8, 45 + Math.random() * (window.innerHeight - 185))}px`;
       wordPopup.innerHTML = `<button class="close-ad close-word-popup" type="button" aria-label="Close word pop-up">×</button><strong>${word}</strong><span>Important information has appeared.</span>`;
       document.body.appendChild(wordPopup);
+      playPaymentChime();
       window.setTimeout(() => wordPopup.remove(), 11000);
     };
 
