@@ -422,7 +422,7 @@
 
     <section class="media-wall" aria-label="Totally real proof">
       <div class="player" data-label="exclusive gameplay footage">
-        <video autoplay loop muted playsinline controls poster="">
+        <video id="bottom-video" autoplay loop muted playsinline controls poster="">
           <source src="DJI_0391_5.webm" type="video/webm">
           <source src="DJI_0391_5.mp4" type="video/mp4">
           Your browser does not support this extremely trustworthy video.
@@ -478,6 +478,7 @@
     const popup = document.getElementById('popup');
     const videoPopup = document.getElementById('video-popup');
     const prankVideo = document.getElementById('prank-video');
+    const bottomVideo = document.getElementById('bottom-video');
     const enableSound = document.getElementById('enable-sound');
     const alarmToggle = document.getElementById('alarm-toggle');
     let alarmContext;
@@ -559,8 +560,10 @@
 
     const closeVideoPopup = () => {
       prankVideo.pause();
-      stopAlarm();
       videoPopup.hidden = true;
+      bottomVideo.muted = false;
+      bottomVideo.volume = 1;
+      bottomVideo.play().catch(() => {});
     };
 
     document.querySelectorAll('[data-close-popup]').forEach((button) => {
