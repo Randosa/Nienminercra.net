@@ -1,66 +1,432 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Add icon library -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-.btn {
-  background-color: darkgreen;
-  border: none;
-  color: white;
-  padding: 12px 30px;
-  cursor: pointer;
-  font-size: 20px;
-}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#020202">
+  <meta name="description" content="Nienminercra.net — an aggressively suspicious parody download page.">
+  <title>Nienminercra.net — 100% REAL DOWNLOAD</title>
+  <style>
+    :root {
+      --acid: #dfff00;
+      --danger: #ff183e;
+      --cyan: #00eaff;
+      --gold: #ffd400;
+      --ink: #050505;
+      --paper: #f4f0df;
+    }
 
-/* Darker background on mouse-over */
-.btn:hover {
-  background-color: darkgreen;
-}
-</style>
-<link href="css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
-<script type="text/javascript">
-function MM_swapImgRestore() { //v3.0
-  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
-}
-function MM_preloadImages() { //v3.0
-  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
-    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
-    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
-}
+    * { box-sizing: border-box; }
 
-function MM_findObj(n, d) { //v4.01
-  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
-    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
-  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
-  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
-  if(!x && d.getElementById) x=d.getElementById(n); return x;
-}
+    html { scroll-behavior: smooth; }
 
-function MM_swapImage() { //v3.0
-  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
-   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
-}
-</script>
+    body {
+      min-width: 320px;
+      margin: 0;
+      overflow-x: hidden;
+      color: #fff;
+      background:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px),
+        radial-gradient(circle at 50% -10%, #253000 0, #080a02 32%, #000 72%);
+      font-family: "Arial Black", Impact, system-ui, sans-serif;
+    }
+
+    button, a { font: inherit; }
+
+    .warning-strip {
+      overflow: hidden;
+      border-block: 4px solid #000;
+      color: #000;
+      background: repeating-linear-gradient(135deg, var(--gold) 0 22px, #111 22px 44px);
+      box-shadow: 0 4px 0 var(--danger);
+    }
+
+    .warning-strip span {
+      display: block;
+      width: max-content;
+      padding: 8px 0;
+      background: var(--gold);
+      animation: ticker 14s linear infinite;
+      text-transform: uppercase;
+    }
+
+    @keyframes ticker { to { transform: translateX(-50%); } }
+
+    .shell { width: min(1180px, calc(100% - 24px)); margin: 22px auto 60px; }
+
+    .top-ads,
+    .ad-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+    }
+
+    .ad {
+      position: relative;
+      min-height: 118px;
+      padding: 16px;
+      overflow: hidden;
+      border: 4px outset #ddd;
+      color: #000;
+      background: var(--paper);
+      box-shadow: 7px 7px 0 rgba(255, 24, 62, .65);
+      text-align: center;
+      transform: rotate(var(--tilt, 0deg));
+    }
+
+    .ad h2, .ad h3, .ad p { margin: 0; }
+    .ad h2 { font-size: clamp(1.35rem, 3.3vw, 3rem); line-height: .9; text-transform: uppercase; }
+    .ad p { margin-top: 8px; font-family: Arial, sans-serif; font-weight: 800; }
+    .ad--wide { grid-column: span 7; --tilt: -.7deg; background: var(--danger); color: #fff; }
+    .ad--counter { grid-column: span 5; --tilt: .8deg; background: var(--cyan); }
+    .ad--lime { grid-column: span 4; background: var(--acid); }
+    .ad--gold { grid-column: span 4; background: var(--gold); }
+    .ad--blue { grid-column: span 4; background: #486dff; color: #fff; }
+
+    .close-ad {
+      position: absolute;
+      top: 3px;
+      right: 4px;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      border: 2px outset #eee;
+      color: #000;
+      background: #ddd;
+      cursor: pointer;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      line-height: 18px;
+    }
+
+    .blink { animation: blink .55s steps(2, start) infinite; }
+    .wobble { display: inline-block; animation: wobble .7s ease-in-out infinite alternate; }
+    @keyframes blink { 50% { opacity: .18; } }
+    @keyframes wobble { to { transform: rotate(3deg) scale(1.05); } }
+
+    .hero {
+      position: relative;
+      margin: 30px 0 24px;
+      padding: clamp(24px, 6vw, 70px) 18px;
+      border: 6px ridge #888;
+      background:
+        linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.65)),
+        repeating-conic-gradient(from 45deg, #172200 0 25%, #050505 0 50%) 50% / 28px 28px;
+      text-align: center;
+      box-shadow: 0 0 42px rgba(223,255,0,.18), inset 0 0 45px #000;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      padding: 5px 10px;
+      color: #000;
+      background: var(--acid);
+      font-size: .78rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transform: rotate(-2deg);
+    }
+
+    h1 {
+      margin: 12px 0 4px;
+      color: var(--acid);
+      font-size: clamp(2.7rem, 9vw, 7.8rem);
+      line-height: .75;
+      letter-spacing: -.06em;
+      text-shadow: 5px 5px 0 var(--danger), -3px -3px 0 var(--cyan);
+      text-transform: uppercase;
+    }
+
+    .tagline {
+      max-width: 750px;
+      margin: 20px auto;
+      font-family: "Comic Sans MS", cursive, sans-serif;
+      font-size: clamp(1rem, 2.5vw, 1.55rem);
+    }
+
+    .download {
+      display: inline-block;
+      position: relative;
+      padding: 16px 28px;
+      border: 5px outset #fbff9d;
+      color: #101500;
+      background: linear-gradient(#efff5c, #86da00);
+      box-shadow: 0 0 25px var(--acid), 8px 8px 0 var(--danger);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: transform .12s;
+    }
+
+    .download:hover { transform: scale(1.08) rotate(-1deg); }
+    .download:focus-visible, .close-ad:focus-visible, .fake-button:focus-visible { outline: 4px solid #fff; outline-offset: 3px; }
+
+    .tiny-proof { margin-top: 15px; color: #bbb; font: 12px Arial, sans-serif; }
+
+    .media-wall {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 14px;
+      margin: 25px 0;
+    }
+
+    .player {
+      position: relative;
+      border: 5px ridge #aaa;
+      background: #050505;
+      box-shadow: 8px 8px 0 #202020;
+    }
+
+    .player::before {
+      content: attr(data-label);
+      position: absolute;
+      z-index: 2;
+      top: 8px;
+      left: 8px;
+      padding: 4px 7px;
+      color: #000;
+      background: var(--gold);
+      font-size: .72rem;
+      text-transform: uppercase;
+    }
+
+    video { display: block; width: 100%; height: 100%; min-height: 230px; object-fit: cover; }
+
+    .scan {
+      display: grid;
+      align-content: center;
+      min-height: 280px;
+      padding: 24px;
+      border: 5px ridge #aaa;
+      color: #071;
+      background: #d9e1d5;
+      box-shadow: 8px 8px 0 #202020;
+      font-family: "Courier New", monospace;
+      font-weight: 900;
+    }
+
+    .scan h2 { margin: 0 0 12px; color: #c00; font-family: Impact, sans-serif; font-size: 2rem; }
+    .meter { height: 28px; margin: 12px 0; border: 3px inset #fff; background: #333; }
+    .meter span { display: block; height: 100%; width: 12%; background: repeating-linear-gradient(90deg, #0f0 0 14px, #090 14px 17px); transition: width .5s; }
+    .threat-count { color: #d00; font-size: 1.7rem; }
+
+    .fake-button {
+      margin-top: 14px;
+      padding: 10px;
+      border: 4px outset #fff;
+      color: #fff;
+      background: #d00;
+      cursor: pointer;
+      text-transform: uppercase;
+    }
+
+    .popup-backdrop {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(2px);
+    }
+
+    .popup {
+      position: relative;
+      width: min(510px, 100%);
+      border: 5px outset #eee;
+      color: #000;
+      background: #e8e8e8;
+      box-shadow: 18px 18px 0 rgba(0,0,0,.7);
+      font-family: Arial, sans-serif;
+    }
+
+    .popup__bar { padding: 7px 9px; color: #fff; background: linear-gradient(90deg, #001d7c, #118de1); font-weight: 700; }
+    .popup__body { padding: 24px; text-align: center; }
+    .popup__body strong { display: block; color: #d00; font: 2.2rem Impact, sans-serif; text-transform: uppercase; }
+    .popup__actions { display: flex; justify-content: center; gap: 12px; margin-top: 18px; }
+    .popup__actions button { min-width: 130px; padding: 9px; border: 3px outset #fff; cursor: pointer; }
+
+    .stamp {
+      display: inline-grid;
+      place-items: center;
+      width: 92px;
+      height: 92px;
+      margin-bottom: 10px;
+      border: 7px double #c00;
+      border-radius: 50%;
+      color: #c00;
+      font-weight: 900;
+      line-height: .9;
+      transform: rotate(-12deg);
+    }
+
+    footer {
+      margin-top: 34px;
+      padding: 20px;
+      border: 2px dashed #555;
+      color: #aaa;
+      font: 13px/1.5 Arial, sans-serif;
+      text-align: center;
+    }
+
+    .confetti { position: fixed; z-index: 30; pointer-events: none; animation: fall 1.5s linear forwards; }
+    @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+
+    @media (max-width: 760px) {
+      .ad--wide, .ad--counter, .ad--lime, .ad--gold, .ad--blue { grid-column: 1 / -1; }
+      .media-wall { grid-template-columns: 1fr; }
+      .top-ads { display: grid; }
+      h1 { line-height: .88; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+    }
+  </style>
 </head>
-<body onLoad="MM_preloadImages('https://cdn.discordapp.com/attachments/718629158661390388/776464126645633024/unknown.png')">
-<img src="https://cdn.discordapp.com/attachments/766426994371723366/776221677037551646/ad.PNG" width="500" height="100" alt=""/><img src="https://cdn.discordapp.com/attachments/718629158661390388/775948696030150687/external-content.duckduckgo.com.png" width="900" height="100" alt=""/><br>
-<center><h2>Nienminercra.net&nbsp;&nbsp;</h2><br>
-<video style="float: right;" width="320" height="240" autoplay loop id="video-background" muted plays-inline>
-  <source src="https://cdn.discordapp.com/attachments/718629158661390388/777044310288891924/afk_arena_ad.mp4" type="video/mp4">
-	<source src="https://cdn.discordapp.com/attachments/718629158661390388/775965410977513491/DJI_0391_6.ogg" type="video/ogg">
-</video>
-<p>Dowlod Here</p><br>
-<a href="https://drive.google.com/file/d/1YR2VNnrMsUzG6SJpm7hFoGIWKVlAwLet/view?usp=sharing" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('Image1','','https://cdn.discordapp.com/attachments/718629158661390388/776464126645633024/unknown.png',1)"><img src="https://cdn.discordapp.com/attachments/718629158661390388/776464126645633024/unknown.png" alt="" width="250" height="100" id="Image1"></a>
-</center>
-<img style="float: right;" alt="" src="https://cdn.discordapp.com/attachments/718629158661390388/776460917860073502/unknown.png" width="300" height="300" alt=""/><img style="float: left;" alt="" src="https://cdn.discordapp.com/attachments/718629158661390388/776461418739400714/unknown.png" width="300" height="300" alt=""/><br><br>
-<center><img src="https://cdn.discordapp.com/attachments/718629158661390388/775947241797713950/Screenshot_2020-11-10_235442.png" width="100" height="100" alt=""/><img src="https://cdn.discordapp.com/attachments/718629158661390388/775947240434696222/Screenshot_2020-11-10_nortan_antivirus_approived_at_DuckDuckGo.png" width="100" height="147" alt=""/><img src="https://cdn.discordapp.com/attachments/718629158661390388/775947237041111061/Screenshot_2020-11-10_nortan_antivirus_approived_at_DuckDuckGo3.png" width="100" height="147" alt=""/></center><img src="https://cdn.discordapp.com/attachments/652675418369032214/775948321352318986/external-content.duckduckgo.com.gif" width="50" height="50" alt=""/><video width="320" height="240" autoplay loop id="video-background" muted plays-inline>>
-  <source src="https://cdn.discordapp.com/attachments/718629158661390388/775958884602609683/DJI_0391_5.webm" type="video/webm">
-	<source src="https://cdn.discordapp.com/attachments/718629158661390388/775965410977513491/DJI_0391_6.ogg" type="video/ogg">
-</video><br>
+<body>
+  <div class="warning-strip" aria-hidden="true">
+    <span>⚠ CONGRATULATION YOU WON ⚠ CLICK EVERY BUTTON ⚠ DEFINITELY NOT A TRAP ⚠ CONGRATULATION YOU WON ⚠ CLICK EVERY BUTTON ⚠ DEFINITELY NOT A TRAP ⚠&nbsp;</span>
+  </div>
 
-<center><img src="https://cdn.discordapp.com/attachments/718629013421293589/776317389813579797/Screenshot_20201112-002450_YouTube.jpg" width="800" height="300" alt=""/></center>
+  <main class="shell">
+    <section class="top-ads" aria-label="Suspicious advertisements">
+      <article class="ad ad--wide">
+        <button class="close-ad" aria-label="Close fake advertisement">×</button>
+        <h2 class="blink">Your computer has 49 viruses!!!</h2>
+        <p>One of them is probably Minecraft. Click to panic.</p>
+      </article>
+      <article class="ad ad--counter">
+        <button class="close-ad" aria-label="Close fake advertisement">×</button>
+        <p>YOU ARE LUCKY VISITOR</p>
+        <h2>#<span id="visitor-number">000042</span></h2>
+        <p>Prize expires in <span id="countdown">00:59</span></p>
+      </article>
+    </section>
+
+    <section class="hero">
+      <span class="eyebrow">totally legitimate gaming website</span>
+      <h1>Nien<br>minercra</h1>
+      <p class="tagline">the #1 block game your antivirus personally begged you not to install</p>
+      <a class="download" id="download" href="https://drive.google.com/file/d/1YR2VNnrMsUzG6SJpm7hFoGIWKVlAwLet/view?usp=sharing" rel="noopener noreferrer">
+        ⬇ Dowlod Here (REAL)
+      </a>
+      <p class="tiny-proof">✓ no survey &nbsp; ✓ no questions &nbsp; ✓ probably pixels</p>
+    </section>
+
+    <section class="ad-grid" aria-label="More suspicious advertisements">
+      <article class="ad ad--lime">
+        <button class="close-ad" aria-label="Close fake advertisement">×</button>
+        <h2 class="wobble">FREE MINECOINS</h2>
+        <p>Your mom said it was okay.</p>
+      </article>
+      <article class="ad ad--gold">
+        <button class="close-ad" aria-label="Close fake advertisement">×</button>
+        <h2>HOT SINGLE CREEPERS</h2>
+        <p>…are in your chunk.</p>
+      </article>
+      <article class="ad ad--blue">
+        <button class="close-ad" aria-label="Close fake advertisement">×</button>
+        <h2 class="blink">100% NORTAN APPROIVED</h2>
+        <p>Certificate printed at home.</p>
+      </article>
+    </section>
+
+    <section class="media-wall" aria-label="Totally real proof">
+      <div class="player" data-label="exclusive gameplay footage">
+        <video autoplay loop muted playsinline controls poster="">
+          <source src="DJI_0391_5.webm" type="video/webm">
+          <source src="DJI_0391_5.mp4" type="video/mp4">
+          Your browser does not support this extremely trustworthy video.
+        </video>
+      </div>
+
+      <div class="scan" aria-live="polite">
+        <h2>SECURITY SCAN</h2>
+        <div>Checking your device for normalness…</div>
+        <div class="meter" aria-hidden="true"><span id="scan-meter"></span></div>
+        <div>Progress: <span id="scan-progress">12</span>%</div>
+        <div class="threat-count"><span id="threats">3</span> threats invented</div>
+        <button class="fake-button" id="fix-button" type="button">FIX EVERYTHING NOW!!!</button>
+      </div>
+    </section>
+
+    <footer>
+      PARODY ZONE: every “ad,” alert, prize, virus, scan, creeper and wildly irresponsible promise on this page is fake. No personal data is collected by this page. The spelling mistakes are artisanal.
+    </footer>
+  </main>
+
+  <div class="popup-backdrop" id="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
+    <div class="popup">
+      <div class="popup__bar">Nienminercra Security Center</div>
+      <div class="popup__body">
+        <div class="stamp">VERY<br>SAFE</div>
+        <strong id="popup-title">Warning: fun detected</strong>
+        <p>Your device may be eligible for one (1) suspicious block game.</p>
+        <div class="popup__actions">
+          <button type="button" data-close-popup>YES</button>
+          <button type="button" data-close-popup>ABSOLUTELY</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const popup = document.getElementById('popup');
+    const closePopup = () => { popup.hidden = true; };
+
+    document.querySelectorAll('[data-close-popup]').forEach((button) => {
+      button.addEventListener('click', closePopup);
+    });
+
+    popup.addEventListener('click', (event) => {
+      if (event.target === popup) closePopup();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') closePopup();
+    });
+
+    document.querySelectorAll('.close-ad').forEach((button) => {
+      button.addEventListener('click', () => {
+        const ad = button.closest('.ad');
+        ad.innerHTML = '<h2>AD CLOSED*</h2><p>*another ad has been notified</p>';
+      });
+    });
+
+    let seconds = 59;
+    window.setInterval(() => {
+      seconds = seconds > 0 ? seconds - 1 : 59;
+      document.getElementById('countdown').textContent = `00:${String(seconds).padStart(2, '0')}`;
+    }, 1000);
+
+    let progress = 12;
+    window.setInterval(() => {
+      progress += Math.ceil(Math.random() * 11);
+      if (progress > 99) progress = 7;
+      document.getElementById('scan-progress').textContent = progress;
+      document.getElementById('scan-meter').style.width = `${progress}%`;
+      document.getElementById('threats').textContent = Math.max(3, Math.floor(progress * 1.73));
+    }, 850);
+
+    document.getElementById('fix-button').addEventListener('click', (event) => {
+      event.currentTarget.textContent = 'TOO LATE. ADDING MORE…';
+      for (let i = 0; i < 30; i += 1) {
+        const bit = document.createElement('span');
+        bit.className = 'confetti';
+        bit.textContent = ['⚠', '💎', '🧱', '$'][i % 4];
+        bit.style.left = `${Math.random() * 100}vw`;
+        bit.style.top = `${-10 - Math.random() * 30}px`;
+        bit.style.animationDelay = `${Math.random() * .5}s`;
+        document.body.appendChild(bit);
+        window.setTimeout(() => bit.remove(), 2200);
+      }
+    });
+
+    document.getElementById('download').addEventListener('click', () => {
+      document.getElementById('visitor-number').textContent = String(Math.floor(Math.random() * 999999)).padStart(6, '0');
+    });
+  </script>
 </body>
 </html>
+
