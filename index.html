@@ -230,6 +230,8 @@
       backdrop-filter: blur(2px);
     }
 
+    .popup-backdrop[hidden] { display: none; }
+
     .popup {
       position: relative;
       width: min(510px, 100%);
@@ -241,6 +243,19 @@
     }
 
     .popup__bar { padding: 7px 9px; color: #fff; background: linear-gradient(90deg, #001d7c, #118de1); font-weight: 700; }
+    .popup__close {
+      position: absolute;
+      top: 5px;
+      right: 6px;
+      width: 27px;
+      height: 25px;
+      padding: 0;
+      border: 2px outset #fff;
+      color: #000;
+      background: #ddd;
+      cursor: pointer;
+      font: 700 16px/18px Arial, sans-serif;
+    }
     .popup__body { padding: 24px; text-align: center; }
     .popup__body strong { display: block; color: #d00; font: 2.2rem Impact, sans-serif; text-transform: uppercase; }
     .popup__actions { display: flex; justify-content: center; gap: 12px; margin-top: 18px; }
@@ -359,6 +374,7 @@
   <div class="popup-backdrop" id="popup" role="dialog" aria-modal="true" aria-labelledby="popup-title">
     <div class="popup">
       <div class="popup__bar">Nienminercra Security Center</div>
+      <button class="popup__close" type="button" data-close-popup aria-label="Close pop-up">×</button>
       <div class="popup__body">
         <div class="stamp">VERY<br>SAFE</div>
         <strong id="popup-title">Warning: fun detected</strong>
