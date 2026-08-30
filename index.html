@@ -438,10 +438,12 @@
       <div class="video-window__bar" id="video-popup-title">URGENT SPONSORED MESSAGE (VERY LOUD)</div>
       <button class="popup__close" id="close-video" type="button" aria-label="Close video pop-up">×</button>
       <video id="prank-video" loop playsinline controls preload="auto">
-        <source src="50%20Ways%20to%20Make%20Money%20Online%20-%20in%205%20MINUTES!.mp4" type="video/mp4">
+        <source src="DJI_0391_5.webm" type="video/webm">
+        <source src="DJI_0391_5.mp4" type="video/mp4">
         Your browser does not support this incredibly valuable video.
       </video>
       <button class="sound-fallback" id="enable-sound" type="button" hidden>Browser got suspicious — click for full-volume wisdom</button>
+      <button class="sound-fallback" id="alarm-toggle" type="button">Mute alarm (if you dare)</button>
     </div>
   </div>
 
@@ -450,12 +452,72 @@
     const videoPopup = document.getElementById('video-popup');
     const prankVideo = document.getElementById('prank-video');
     const enableSound = document.getElementById('enable-sound');
+    const alarmToggle = document.getElementById('alarm-toggle');
+    let alarmContext;
+    let alarmTimer;
+    let alarmMuted = false;
+
+    const playAlarmBurst = () => {
+      const now = alarmContext.currentTime;
+      const master = alarmContext.createGain();
+      const bass = alarmContext.createOscillator();
+      const siren = alarmContext.createOscillator();
+      const bassGain = alarmContext.createGain();
+      const sirenGain = alarmContext.createGain();
+      const compressor = alarmContext.createDynamicsCompressor();
+
+      bass.type = 'sawtooth';
+      bass.frequency.setValueAtTime(74, now);
+      bass.frequency.exponentialRampToValueAtTime(48, now + .24);
+      siren.type = 'square';
+      siren.frequency.setValueAtTime(760, now);
+      siren.frequency.linearRampToValueAtTime(1120, now + .12);
+      siren.frequency.linearRampToValueAtTime(760, now + .24);
+
+      bassGain.gain.setValueAtTime(.001, now);
+      bassGain.gain.exponentialRampToValueAtTime(.95, now + .025);
+      bassGain.gain.exponentialRampToValueAtTime(.001, now + .27);
+      sirenGain.gain.setValueAtTime(.001, now);
+      sirenGain.gain.exponentialRampToValueAtTime(.38, now + .02);
+      sirenGain.gain.exponentialRampToValueAtTime(.001, now + .24);
+      master.gain.value = .92;
+      compressor.threshold.value = -18;
+      compressor.ratio.value = 12;
+
+      bass.connect(bassGain).connect(master);
+      siren.connect(sirenGain).connect(master);
+      master.connect(compressor).connect(alarmContext.destination);
+      bass.start(now);
+      siren.start(now);
+      bass.stop(now + .29);
+      siren.stop(now + .29);
+    };
+
+    const startAlarm = () => {
+      if (alarmTimer || alarmMuted) return;
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      alarmContext = alarmContext || new AudioContext();
+      alarmContext.resume().then(() => {
+        if (alarmMuted || alarmTimer) return;
+        playAlarmBurst();
+        alarmTimer = window.setInterval(playAlarmBurst, 620);
+      });
+    };
+
+    const stopAlarm = () => {
+      if (alarmTimer) window.clearInterval(alarmTimer);
+      alarmTimer = undefined;
+    };
 
     const startVideoPopup = () => {
       videoPopup.hidden = false;
       prankVideo.muted = false;
       prankVideo.volume = 1;
       prankVideo.currentTime = 0;
+      alarmMuted = false;
+      alarmToggle.textContent = 'Mute alarm (if you dare)';
+      startAlarm();
       const playback = prankVideo.play();
       if (playback) {
         playback.catch(() => { enableSound.hidden = false; });
@@ -470,6 +532,7 @@
 
     const closeVideoPopup = () => {
       prankVideo.pause();
+      stopAlarm();
       videoPopup.hidden = true;
     };
 
@@ -492,6 +555,17 @@
       prankVideo.volume = 1;
       prankVideo.play();
       enableSound.hidden = true;
+    });
+
+    alarmToggle.addEventListener('click', () => {
+      alarmMuted = !alarmMuted;
+      if (alarmMuted) {
+        stopAlarm();
+        alarmToggle.textContent = 'Unmute alarm (bad choice)';
+      } else {
+        alarmToggle.textContent = 'Mute alarm (if you dare)';
+        startAlarm();
+      }
     });
 
     document.addEventListener('keydown', (event) => {
