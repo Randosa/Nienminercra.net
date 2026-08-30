@@ -330,6 +330,33 @@
       text-align: center;
     }
 
+    .word-popup {
+      position: fixed;
+      z-index: 28;
+      width: min(235px, calc(100vw - 24px));
+      padding: 9px 12px 13px;
+      border: 4px outset #f4f4f4;
+      color: #000;
+      background: #ffffd0;
+      box-shadow: 7px 7px 0 rgba(255, 24, 62, .75);
+      font-family: Arial, sans-serif;
+      animation: popup-arrive .18s steps(2, end);
+    }
+
+    .word-popup strong {
+      display: block;
+      padding-right: 24px;
+      color: #d00;
+      font-family: Impact, sans-serif;
+      font-size: 1.7rem;
+      letter-spacing: .03em;
+      text-transform: uppercase;
+    }
+
+    .word-popup span { display: block; margin-top: 5px; font-size: .75rem; font-weight: 700; }
+    .word-popup button { position: absolute; top: 3px; right: 4px; }
+    @keyframes popup-arrive { from { transform: scale(.4) rotate(-7deg); opacity: 0; } }
+
     .confetti { position: fixed; z-index: 30; pointer-events: none; animation: fall 1.5s linear forwards; }
     @keyframes fall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
 
@@ -574,17 +601,42 @@
       else if (!videoPopup.hidden) closeVideoPopup();
     });
 
-    document.querySelectorAll('.close-ad').forEach((button) => {
-      button.addEventListener('click', () => {
-        const ad = button.closest('.ad');
-        ad.innerHTML = '<h2>AD CLOSED*</h2><p>*another ad has been notified</p>';
+    const adCampaigns = [
+      { title: 'YOUR PC HAS 49 VIRUSES!!!', body: 'One of them is probably Minecraft.' },
+      { title: 'FREE MINECOINS', body: 'Your mom said it was okay.' },
+      { title: 'HOT SINGLE CREEPERS', body: '…are in your chunk.' },
+      { title: '100% NORTAN APPROIVED', body: 'Certificate printed at home.' },
+      { title: 'YOU WON A BRAND NEW BLOCK', body: 'Claim before gravity notices!' }
+    ];
+    const adSlots = [...document.querySelectorAll('.ad')];
+    let adRound = 0;
+
+    const cycleAds = () => {
+      adSlots.forEach((ad, index) => {
+        const campaign = adCampaigns[(adRound + index) % adCampaigns.length];
+        ad.innerHTML = `<button class="close-ad" aria-label="Close fake advertisement">×</button><h2 class="${index % 2 ? 'wobble' : 'blink'}">${campaign.title}</h2><p>${campaign.body}</p>`;
       });
+      adRound = (adRound + 1) % adCampaigns.length;
+    };
+
+    window.setInterval(cycleAds, 4000);
+
+    document.addEventListener('click', (event) => {
+      const closeAd = event.target.closest('.close-ad');
+      if (closeAd) {
+        const ad = closeAd.closest('.ad');
+        if (ad) ad.innerHTML = '<h2>AD CLOSED*</h2><p>*another ad has been notified</p>';
+      }
+
+      const closeWordPopup = event.target.closest('.close-word-popup');
+      if (closeWordPopup) closeWordPopup.closest('.word-popup')?.remove();
     });
 
     let seconds = 59;
     window.setInterval(() => {
       seconds = seconds > 0 ? seconds - 1 : 59;
-      document.getElementById('countdown').textContent = `00:${String(seconds).padStart(2, '0')}`;
+      const countdown = document.getElementById('countdown');
+      if (countdown) countdown.textContent = `00:${String(seconds).padStart(2, '0')}`;
     }, 1000);
 
     let progress = 12;
@@ -611,8 +663,26 @@
     });
 
     document.getElementById('download').addEventListener('click', () => {
-      document.getElementById('visitor-number').textContent = String(Math.floor(Math.random() * 999999)).padStart(6, '0');
+      const visitorNumber = document.getElementById('visitor-number');
+      if (visitorNumber) visitorNumber.textContent = String(Math.floor(Math.random() * 999999)).padStart(6, '0');
     });
+
+    const randomWords = ['BANANA', 'SUSPICIOUS', 'CHEESE', 'FREE', 'MONEY', 'YIPPEE', 'POTATO', 'WARNING', 'DOWNLOAD', 'TURN AROUND', 'ABSOLUTELY', 'BEEP BEEP'];
+    const spawnWordPopup = () => {
+      const openPopups = [...document.querySelectorAll('.word-popup')];
+      if (openPopups.length >= 5) openPopups[0].remove();
+      const wordPopup = document.createElement('div');
+      const word = randomWords[Math.floor(Math.random() * randomWords.length)];
+      wordPopup.className = 'word-popup';
+      wordPopup.style.left = `${Math.max(8, Math.random() * (window.innerWidth - 245))}px`;
+      wordPopup.style.top = `${Math.max(8, 45 + Math.random() * (window.innerHeight - 185))}px`;
+      wordPopup.innerHTML = `<button class="close-ad close-word-popup" type="button" aria-label="Close word pop-up">×</button><strong>${word}</strong><span>Important information has appeared.</span>`;
+      document.body.appendChild(wordPopup);
+      window.setTimeout(() => wordPopup.remove(), 11000);
+    };
+
+    window.setTimeout(spawnWordPopup, 1800);
+    window.setInterval(spawnWordPopup, 3600);
   </script>
 </body>
 </html>
